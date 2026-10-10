@@ -4,6 +4,8 @@
 
 extern double get_cur_time();
 
+double maxsum(size_t N, size_t ld, double *matrix, int NT);
+
 double** matrix_allocation(size_t N){
     size_t i;
 
@@ -55,7 +57,7 @@ int main(){
     size_t size_mat[] = {800, 1600, 2400, 3200, 4000, 4800, 5400};
     size_t count_size = sizeof(size_mat) / sizeof(size_mat[0]);
 
-    size_t NT[] = {1, 2, 4, 8};
+    int NT[] = {1, 2, 4, 8};
     size_t count_NT = sizeof(NT) / sizeof(NT[0]);
 
     for(size_t i=0; i<count_size; i++){

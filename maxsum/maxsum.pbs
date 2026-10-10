@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#PBS -N maxsum
+#PBS -q studenti
+#PBS -o maxsum.out
+#PBS -e maxsum.err
+
+cd $PBS_O_WORKDIR
+echo "Running..."
+gcc -std=gnu99 -fopenmp -O2 main.c c_timer.c maxsum.c -o maxsum.exe -lm
+
+./maxsum.exe
