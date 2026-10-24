@@ -4,7 +4,7 @@
 
 extern double get_cur_time();
 
-double maxsum(size_t N, size_t ld, double *matrix, int NT);
+double maxsum(int N, int ld, double *matrix, int NT);
 
 double** matrix_allocation(size_t N){
     size_t i;
@@ -26,7 +26,7 @@ double** matrix_allocation(size_t N){
         matrix[i] = &pool[i*N];
     }
 
-    for(i=0; i<N*N ;i++){
+    for(i=0; i<N*N; i++){
         pool[i] = rand() % 100;
     }
 
@@ -46,25 +46,25 @@ void matrix_free(double** matrix){
     printf("Memory free correctly.\n");
 }
 
-int main(){
-    size_t ld = 5400;
+int main(void){
+    int ld = 5400;
 
-    double **matrix = matrix_allocation(ld); 
+    double **matrix = matrix_allocation((size_t)ld);
     if (matrix == NULL){
         return 1;
     }
 
-    size_t size_mat[] = {800, 1600, 2400, 3200, 4000, 4800, 5400};
-    size_t count_size = sizeof(size_mat) / sizeof(size_mat[0]);
+    int size_mat[] = {800, 1600, 2400, 3200, 4000, 4800, 5400};
+    int count_size = sizeof(size_mat) / sizeof(size_mat[0]);
 
     int NT[] = {1, 2, 4, 8};
-    size_t count_NT = sizeof(NT) / sizeof(NT[0]);
+    int count_NT = sizeof(NT) / sizeof(NT[0]);
 
-    for(size_t i=0; i<count_size; i++){
-        printf("MaxSum on size %zux%zu;\n", size_mat[i], size_mat[i]);
+    for(int i=0; i<count_size; i++){
+        printf("MaxSum on size %dx%d;\n", size_mat[i], size_mat[i]);
         double t_seq = 0.0;
 
-        for(size_t j=0; j<count_NT; j++){
+        for(int j=0; j<count_NT; j++){
             double start = get_cur_time();
             double max = maxsum(size_mat[i], ld, matrix[0], NT[j]);
             double end = get_cur_time();
@@ -77,7 +77,8 @@ int main(){
             double speedup = t_seq / time_execution;
             double efficiency = speedup / NT[j];
 
-            printf("NT=%d | max=%f | time=%.6fs | speedup=%.3f | efficiency=%.3f\n", NT[j], max, time_execution, speedup, efficiency);
+            printf("NT=%d | max=%f | time=%.6fs | speedup=%.3f | efficiency=%.3f\n",
+                   NT[j], max, time_execution, speedup, efficiency);
         }
     }
 

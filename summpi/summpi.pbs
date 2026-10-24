@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#PBS -q studenti
+#PBS -l nodes=7:ppn=8
+#PBS -N summpi
+#PBS -o summpi.out
+#PBS -e summpi.err
+
+cat $PBS_NODEFILE
+cd $PBS_O_WORKDIR
+
+sort -u $PBS_NODEFILE > machinefile
+
+NCPU=`wc -l < machinefile`
+
+echo "Il job e' in esecuzione sugli" $NCPU " nodi:"
+cat machinefile
+
+MPI_DIR=/usr/lib64/openmpi/1.4-gcc/bin
+$MPI_DIR/mpicc -o summpi main.c summpi.c
+$MPI_DIR/mpiexec -np $NCPU -machinefile machinefile summpi
