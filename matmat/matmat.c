@@ -1,3 +1,4 @@
+#include <omp.h>
 
 void matmatijk(int ldA, int ldB, int ldC, double *A, double *B, double *C, int N1, int N2, int N3)
 {
@@ -64,4 +65,29 @@ void matmatblock(int ldA, int ldB, int ldC, double *A, double *B, double *C,
                 }
             }
         }
+}
+
+void matmatthread(int ldA, int ldB, int ldC, double *A, double *B, double *C, int N1, int N2, int N3, int dbA, int dbB, int dbC, int NTROW, int NTCOL){
+
+    int NT = NTROW * NTCOL;
+
+    #pragma omp parallel num_threads(NT)
+    {
+        int t   = omp_get_thread_num();
+        int IDi = t / NTCOL;
+        int IDj = t % NTCOL;
+
+        int nr = N1 / NTROW;
+        int nc = N3 / NTCOL;
+
+        int r0 = IDi * nr;
+        int c0 = IDj * nc;
+
+        matmatblock(ldA, ldB, ldC,
+                    &A[r0*ldA],
+                    &B[c0],
+                    &C[r0*ldC + c0],
+                    nr, N2, nc,
+                    dbA, dbB, dbC);
+    }
 }
