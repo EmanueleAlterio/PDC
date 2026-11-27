@@ -2,3 +2,5 @@ mainmaxsum.c
 *.exe
 mpiProva
 .vscode
+matmat/main.c
+matmat/matmat
